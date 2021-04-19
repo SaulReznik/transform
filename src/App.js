@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import useStyles from './styles.js';
 
 import Slider from './components/Slider';
@@ -17,24 +17,22 @@ const App = () => {
   const classes = useStyles();
   const { app } = classes;
 
-  const sliderHandler = (type, value) => {
-    setMatrix({
-      ...matrix,
-      [type]: value,
-    })
-  }
+  const callback = (type, value) => { setMatrix((prevMetrix) => ({...prevMetrix, [type]: value })) };
+  const sliderHandler = useCallback(callback, []);
 
   return (
     <div className={app}>
       <div className="sliderBar">
         {
-          Object.entries(matrix).map((item) => {
-            return(
+          Object.keys(matrix).map(key => {
+            return (
               <Slider
+                key={matrix}
                 onChange={sliderHandler}
-                value={item}
+                type={key}
+                value={matrix[key]}
               />
-            )
+            );
           })
         }
       </div>
