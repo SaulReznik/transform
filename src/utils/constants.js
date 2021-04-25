@@ -1,0 +1,1 @@
+export const STANDART_MIN_MAX = 10;

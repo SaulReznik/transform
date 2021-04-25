@@ -6,7 +6,7 @@ const Screen = ({ matrix }) => {
 
     return (
         <div className={container}>
-            <div className={target}/>
+            <div className={target}>target</div>
         </div>
     )
 };

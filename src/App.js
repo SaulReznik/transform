@@ -2,9 +2,10 @@ import { useCallback, useState } from 'react';
 import useStyles from './styles.js';
 
 import Slider from './components/Slider';
+import Rotation from './components/Rotation';
 import Screen from './components/Screen';
 
-import { degreeToRadian, radianToDegree } from './utils/helpers';
+import { degreeToRadian } from './utils/helpers';
 
 const App = () => {
   const [matrix, setMatrix] = useState({
@@ -26,38 +27,33 @@ const App = () => {
   const rotate = e => {
     const { value } = e.target;
     const rotationRadian = degreeToRadian(value);
-    const newScale = Math.cos(rotationRadian);
-    const newSkewX = -Math.sin(rotationRadian);
-    const newSkewY = Math.sin(rotationRadian);
+    const newScale = Math.cos(rotationRadian).toFixed(2);
+    const newSkew = Math.sin(rotationRadian).toFixed(2);
+
     setRotationAngle(value);
     setMatrix({
       ...matrix,
       scaleX: newScale,
       scaleY: newScale,
-      skewX: newSkewX,
-      skewY: newSkewY
+      skewX: -newSkew,
+      skewY: newSkew,
     });
   };
 
   return (
     <div className={app}>
       <div className="sliderBar">
-        <div>
-          <div>Rotation Angle: {rotationAngle}</div>
-          <input
-            type="range"
-            max="360"
-            value={rotationAngle}
-            onChange={rotate}
-          />
-        </div>
+        <Rotation 
+          value={rotationAngle}
+          onChange={rotate}
+        />
         {
-          Object.keys(matrix).map(key => {
+          Object.keys(matrix).map((key, index) => {
             return (
               <Slider
-                key={matrix}
+                key={`${key}${index}`}
                 onChange={sliderHandler}
-                type={key}
+                name={key}
                 value={matrix[key]}
               />
             );
