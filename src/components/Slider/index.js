@@ -2,24 +2,24 @@ import { useMemo, memo } from 'react';
 
 import useStyles from './styles';
 
-const STANDART_MIN_MAX = 10;
+import { STANDART_MIN_MAX } from '../../utils/constants';
 
-const Slider = ({ onChange: parentOnChange, value: parentValue, type }) => {
+const Slider = ({ onChange: parentOnChange, value: parentValue, name }) => {
 
     const classes = useStyles();
     const { container } = classes;
 
-    const minMax = useMemo(() => type.includes('translate') ? STANDART_MIN_MAX * 100 : STANDART_MIN_MAX, [type]);
+    const minMax = useMemo(() => name.includes('translate') ? STANDART_MIN_MAX * 100 : STANDART_MIN_MAX, [name]);
 
     const sliderHandler = e => {
         e.preventDefault();
         const { value } = e.target;
-        parentOnChange(type, value)
+        parentOnChange(name, value)
     }
 
     return (
         <div className={container}>
-            <div>{type}: {parentValue} - {minMax}</div>
+            <div>{name}: {parentValue} - {minMax}</div>
             <input
                 type="range"
                 min={-minMax}
