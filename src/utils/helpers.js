@@ -1,7 +1,7 @@
 export const degreeToRadian = degree => degree * (Math.PI / 180);
 export const radianToDegree = radian => radian * (180 / Math.PI);
 
-export const multiplyMatixWithPoint = (matrix, point) => {
+export const multiplyMatrixWithPoint = (matrix, point) => {
   return point.map((dimension, index) => {
     let result = 0;
 
@@ -21,9 +21,9 @@ export const matrixToPoints = matrix => {
     const onePoint = [];
 
     for (let j = 0; j < 4; j++) {
-      onePoint.push(matrix[i + j]);
+      onePoint.push(matrix[4 * i + j]);
     }
-
+    
     result.push(onePoint);
   }
 
@@ -35,7 +35,7 @@ export const pointsToMatrix = points => points.reduce((acc, points) => [...acc, 
 export const multiplyMatrices = (matrixA, matrixB) => {
   const separatePoints = matrixToPoints(matrixB);
 
-  return pointsToMatrix(separatePoints.map(point => multiplyMatixWithPoint(matrixA, point)));
+  return pointsToMatrix(separatePoints.map(point => multiplyMatrixWithPoint(matrixA, point)));
 };
 
 export const matrixToCSSMatrix = matrix => `matrix3d(${matrix.join(',')})`;

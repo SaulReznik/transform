@@ -1,44 +1,31 @@
 import { useCallback, useState } from 'react';
 import useStyles from './styles.js';
 
-import Slider from './components/Slider';
+// import Slider from './components/Slider';
 import Rotation from './components/Rotation';
 import Screen from './components/Screen';
 
-import { degreeToRadian } from './utils/helpers';
+import { 
+  rotationMatrixGenerator,
+  multiplyMatrices
+} from './utils/helpers';
+import { DEFAULT_MATRIX } from './utils/constants';
 
 const App = () => {
-  const [matrix, setMatrix] = useState({
-    scaleX: 1,
-    skewY: 0,
-    skewX: 0,
-    scaleY: 1,
-    translateX: 0,
-    translateY: 0
-  });
+  const [matrix, setMatrix] = useState(DEFAULT_MATRIX);
   const [rotationAngle, setRotationAngle] = useState(0);
 
   const classes = useStyles();
   const { app } = classes;
 
-  const callback = (type, value) => { setMatrix((prevMetrix) => ({...prevMetrix, [type]: value })) };
-  const sliderHandler = useCallback(callback, []);
 
-  const rotate = e => {
-    const { value } = e.target;
-    const rotationRadian = degreeToRadian(value);
-    const newScale = Math.cos(rotationRadian).toFixed(2);
-    const newSkew = Math.sin(rotationRadian).toFixed(2);
-
-    setRotationAngle(value);
-    setMatrix({
-      ...matrix,
-      scaleX: newScale,
-      scaleY: newScale,
-      skewX: -newSkew,
-      skewY: newSkew,
-    });
-  };
+  const rotate = useCallback(e => {
+    const { value: angle } = e.target;
+    const rotationMatrix = rotationMatrixGenerator(+angle);
+    const newMatrix = multiplyMatrices(DEFAULT_MATRIX, rotationMatrix);
+    setMatrix(newMatrix);
+    setRotationAngle(angle);
+  }, []);
 
   return (
     <div className={app}>
@@ -47,18 +34,6 @@ const App = () => {
           value={rotationAngle}
           onChange={rotate}
         />
-        {
-          Object.keys(matrix).map((key, index) => {
-            return (
-              <Slider
-                key={`${key}${index}`}
-                onChange={sliderHandler}
-                name={key}
-                value={matrix[key]}
-              />
-            );
-          })
-        }
       </div>
       <Screen matrix={matrix} />
     </div> 
