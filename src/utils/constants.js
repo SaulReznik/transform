@@ -5,7 +5,7 @@ export const DEFAULT_MATRIX = [
   0, 0, 1, 0,
   0, 0, 0, 1
 ];
-export const DEFAULT_SCALE = {
+export const DEFAULT_XY = {
   x: 1,
   y: 1,
 };

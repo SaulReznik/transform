@@ -59,3 +59,12 @@ export const scaleMatrixGenerator = ({ x, y }) => (
     0, 0, 0, 1
   ]
 );
+
+export const translateMatrixGenerator = ({ x, y }) => (
+  [
+    1, 0, 0, 0,
+    0, 1, 0, 0,
+    0, 0, 1, 0,
+    x, y, 0, 1
+  ]
+);

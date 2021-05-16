@@ -4,20 +4,23 @@ import useStyles from './styles.js';
 // import Slider from './components/Slider';
 import Rotation from './components/Rotation';
 import Scale from './components/Scale';
+import Translate from './components/Translate';
 import Screen from './components/Screen';
 
 import { 
   rotationMatrixGenerator,
   scaleMatrixGenerator,
+  translateMatrixGenerator,
   multiplyMatrices
 } from './utils/helpers';
-import { DEFAULT_MATRIX, DEFAULT_SCALE } from './utils/constants';
+import { DEFAULT_MATRIX, DEFAULT_XY } from './utils/constants';
 
 const App = () => {
   const [matrix, setMatrix] = useState(DEFAULT_MATRIX);
   const [currentMatrix, setCurrentMatrix] = useState(matrix);
   const [rotationAngle, setRotationAngle] = useState(0);
-  const [scale, setScale] = useState(DEFAULT_SCALE);
+  const [scale, setScale] = useState(DEFAULT_XY);
+  const [translate, setTranslate] = useState(DEFAULT_XY);
   const [transformations, setTransformations] = useState([]);
 
   const classes = useStyles();
@@ -47,10 +50,24 @@ const App = () => {
     setScale(updatedScale);
   }, [scale]);
 
+  const changeTranslation = useCallback((e, position) => {
+    const { value } = e.target;
+    const updatedTranslation = {
+      ...translate,
+      [position]: +value
+    };
+
+    const translateMatrix = translateMatrixGenerator(updatedTranslation);
+    const updatedMatrix = multiplyMatrices(DEFAULT_MATRIX, translateMatrix);
+
+    setCurrentMatrix(updatedMatrix);
+    setTranslate(updatedTranslation);
+  }, [translate]);
+
   const mouseUp = useCallback(() => {
     console.log('called');
     setTransformations([...transformations, currentMatrix]);
-  }, [transformations]);
+  }, [transformations, currentMatrix]);
 
   useMemo(() => {
     const updatedMatrix = transformations.reduce((acc, curr) => {
@@ -75,6 +92,17 @@ const App = () => {
               value={scale[dimension]}
               dimension={dimension}
               onChange={changeScale}
+              onMouseUp={mouseUp}
+            />
+          ))
+        }
+        {
+          Object.keys(translate).map((position, index) => (
+            <Translate
+              key={index}
+              value={translate[position]}
+              position={position}
+              onChange={changeTranslation}
               onMouseUp={mouseUp}
             />
           ))

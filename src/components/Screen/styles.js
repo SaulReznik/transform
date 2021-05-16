@@ -3,7 +3,7 @@ import { matrixToCSSMatrix } from '../../utils/helpers';
 
 const useStyles = createUseStyles({
     container: {
-        height: 500,
+        height: 800,
         width: 800,
         border: '1px solid black',
         display: 'flex',
