@@ -46,7 +46,16 @@ export const rotationMatrixGenerator = angle => {
   return [
     Math.cos(radians), -Math.sin(radians),    0,    0,
     Math.sin(radians),  Math.cos(radians),    0,    0,
-         0,       0,    1,    0,
-         0,       0,    0,    1
+                    0,                  0,    1,    0,
+                    0,                  0,    0,    1
   ];
 };
+
+export const scaleMatrixGenerator = ({ x, y, z }) => (
+  [
+    x, 0, 0, 0,
+    0, y, 0, 0,
+    0, 0, z, 0,
+    0, 0, 0, 1
+  ]
+);
