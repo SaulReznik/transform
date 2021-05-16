@@ -1,4 +1,4 @@
-const Scale = ({ value, dimension, onChange: parentOnChange }) => (
+const Scale = ({ value, dimension, onChange: parentOnChange, onMouseUp: parentOnMouseUp }) => (
   <div>
       <div>Scale {dimension}: {value}</div>
           <input
@@ -7,6 +7,7 @@ const Scale = ({ value, dimension, onChange: parentOnChange }) => (
               max="5"
               value={value}
               onChange={(e) => parentOnChange(e, dimension)}
+              onMouseUp={parentOnMouseUp}
           />
   </div>
 );

@@ -51,11 +51,11 @@ export const rotationMatrixGenerator = angle => {
   ];
 };
 
-export const scaleMatrixGenerator = ({ x, y, z }) => (
+export const scaleMatrixGenerator = ({ x, y }) => (
   [
     x, 0, 0, 0,
     0, y, 0, 0,
-    0, 0, z, 0,
+    0, 0, 1, 0,
     0, 0, 0, 1
   ]
 );

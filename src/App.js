@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import useStyles from './styles.js';
 
 // import Slider from './components/Slider';
@@ -11,16 +11,14 @@ import {
   scaleMatrixGenerator,
   multiplyMatrices
 } from './utils/helpers';
-import { DEFAULT_MATRIX } from './utils/constants';
+import { DEFAULT_MATRIX, DEFAULT_SCALE } from './utils/constants';
 
 const App = () => {
   const [matrix, setMatrix] = useState(DEFAULT_MATRIX);
+  const [currentMatrix, setCurrentMatrix] = useState(matrix);
   const [rotationAngle, setRotationAngle] = useState(0);
-  const [scale, setScale] = useState({
-    x: 1,
-    y: 1,
-    z: 1,
-  });
+  const [scale, setScale] = useState(DEFAULT_SCALE);
+  const [transformations, setTransformations] = useState([]);
 
   const classes = useStyles();
   const { app } = classes;
@@ -30,7 +28,8 @@ const App = () => {
     const { value: angle } = e.target;
     const rotationMatrix = rotationMatrixGenerator(+angle);
     const updatedMatrix = multiplyMatrices(DEFAULT_MATRIX, rotationMatrix);
-    setMatrix(updatedMatrix);
+
+    setCurrentMatrix(updatedMatrix);
     setRotationAngle(angle);
   }, []);
 
@@ -44,9 +43,22 @@ const App = () => {
     const scaleMatrix = scaleMatrixGenerator(updatedScale);
     const updatedMatrix = multiplyMatrices(DEFAULT_MATRIX, scaleMatrix);
 
-    setMatrix(updatedMatrix);
+    setCurrentMatrix(updatedMatrix);
     setScale(updatedScale);
   }, [scale]);
+
+  const mouseUp = useCallback(() => {
+    console.log('called');
+    setTransformations([...transformations, currentMatrix]);
+  }, [transformations]);
+
+  useMemo(() => {
+    const updatedMatrix = transformations.reduce((acc, curr) => {
+      return multiplyMatrices(curr, acc);
+    }, DEFAULT_MATRIX);
+
+    setMatrix(updatedMatrix);
+  }, [transformations]);
 
   return (
     <div className={app}>
@@ -54,6 +66,7 @@ const App = () => {
         <Rotation 
           value={rotationAngle}
           onChange={rotate}
+          onMouseUp={mouseUp}
         />
         {
           Object.keys(scale).map((dimension, index) => (
@@ -62,11 +75,12 @@ const App = () => {
               value={scale[dimension]}
               dimension={dimension}
               onChange={changeScale}
+              onMouseUp={mouseUp}
             />
           ))
         }
       </div>
-      <Screen matrix={matrix} />
+      <Screen currentMatrix={currentMatrix} matrix={matrix} />
     </div> 
   );
 }

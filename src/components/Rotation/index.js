@@ -1,4 +1,4 @@
-const Rotation = ({ value, onChange: parentOnChange }) => (
+const Rotation = ({ value, onChange: parentOnChange, onMouseUp: parentOnMouseUp }) => (
     <div>
         <div>Rotation Angle: {value}</div>
             <input
@@ -6,6 +6,7 @@ const Rotation = ({ value, onChange: parentOnChange }) => (
                 max="360"
                 value={value}
                 onChange={parentOnChange}
+                onMouseUp={parentOnMouseUp}
             />
     </div>
 );
