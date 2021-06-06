@@ -1,4 +1,4 @@
-const Translate = ({ value, position, onChange: parentOnChange, onMouseUp: parentOnMouseUp }) => (
+const Translate = ({ value, position, onChange: parentOnChange }) => (
   <div>
       <div>Translate {position}: {value}</div>
           <input
@@ -7,7 +7,6 @@ const Translate = ({ value, position, onChange: parentOnChange, onMouseUp: paren
               max="350"
               value={value}
               onChange={(e) => parentOnChange(e, position)}
-              onMouseUp={parentOnMouseUp}
           />
   </div>
 );

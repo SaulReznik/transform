@@ -1,6 +1,6 @@
 export const degreeToRadian = degree => degree * (Math.PI / 180);
-export const radianToDegree = radian => radian * (180 / Math.PI);
 
+// Appling one transformation to the single point
 export const multiplyMatrixWithPoint = (matrix, point) => {
   return point.map((dimension, index) => {
     let result = 0;
@@ -10,10 +10,11 @@ export const multiplyMatrixWithPoint = (matrix, point) => {
       result += dimension * matrix[matrixIndex];
     }
 
-    return result;
+    return +result.toFixed(2);
   })
 };
 
+// Just creating 2D array to make it easy to calculate the matrix
 export const matrixToPoints = matrix => {
   const result = [];
 
@@ -30,12 +31,20 @@ export const matrixToPoints = matrix => {
   return result;
 };
 
-export const pointsToMatrix = points => points.reduce((acc, points) => [...acc, ...points], []);
+export const multiplyMatrices = (B, A) => {
+  const result = [];
 
-export const multiplyMatrices = (matrixA, matrixB) => {
-  const separatePoints = matrixToPoints(matrixB);
+  for (let i = 0; i < 4; ++i){
+    for (let j = 0; j < 4; ++j){
+      let cell = 0;
 
-  return pointsToMatrix(separatePoints.map(point => multiplyMatrixWithPoint(matrixA, point)));
+      for (let k = 0; k < 4; ++k) {
+          cell += A[4 * i + k] * B[4 * k + j];
+      }
+      result.push(cell);
+    }
+  }
+  return result;
 };
 
 export const matrixToCSSMatrix = matrix => `matrix3d(${matrix.join(',')})`;
@@ -46,25 +55,25 @@ export const rotationMatrixGenerator = angle => {
   return [
     Math.cos(radians), -Math.sin(radians),    0,    0,
     Math.sin(radians),  Math.cos(radians),    0,    0,
-                    0,                  0,    1,    0,
-                    0,                  0,    0,    1
+    0,                  0,    1,    0,
+    0,                  0,    0,    1
   ];
 };
 
 export const scaleMatrixGenerator = ({ x, y }) => (
-  [
-    x, 0, 0, 0,
-    0, y, 0, 0,
-    0, 0, 1, 0,
-    0, 0, 0, 1
-  ]
+    [
+      x, 0, 0, 0,
+      0, y, 0, 0,
+      0, 0, 1, 0,
+      0, 0, 0, 1
+    ]
 );
 
 export const translateMatrixGenerator = ({ x, y }) => (
-  [
-    1, 0, 0, 0,
-    0, 1, 0, 0,
-    0, 0, 1, 0,
-    x, y, 0, 1
-  ]
+    [
+      1, 0, 0, 0,
+      0, 1, 0, 0,
+      0, 0, 1, 0,
+      x, y, 0, 1
+    ]
 );

@@ -16,15 +16,7 @@ const useStyles = createUseStyles({
         position: "absolute",
         backgroundColor: 'rgba(255, 0, 0, 0.5)',
         transform: (({ matrix }) => matrixToCSSMatrix(matrix)),
-        // transition: 'all 300ms',
-    },
-    cMatrix: {
-        height: 100,
-        width: 100,
-        position: "absolute",
-        backgroundColor: 'rgba(128, 128, 128, 0.5)',
-        transform: (({ currentMatrix }) => matrixToCSSMatrix(currentMatrix)),
-        // transition: 'all 300ms',
+        transition: 'all 100ms',
     }
 });
 
